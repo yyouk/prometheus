@@ -55,7 +55,7 @@ WantedBy=multi-user.target
 
 ​	`systemctl start prometheus`
 
-​	`	systemctl status prometheus`
+​	`systemctl status prometheus`
 
 ​	`systemctl enable prometheus`
 
@@ -73,7 +73,7 @@ WantedBy=multi-user.target
 
 ### 2.解压
 
-​	` tar -zxvf node_exporter-1.5.0.linux-amd64.tar.gz -C /data/`
+​	`tar -zxvf node_exporter-1.5.0.linux-amd64.tar.gz -C /data/`
 
 ​	`mv /data/node_exporter-1.5.0.linux-amd64/ /data/node_exporter`
 
@@ -108,6 +108,7 @@ WantedBy=multi-user.target
 ### 5. 监控端配置
 
 - 在主配置文件最后加上下面三行
+  
   `vim /data/prometheus/prometheus.yml`
 
 ```bash
@@ -141,7 +142,7 @@ Checking prometheus.yml
 
 ### 2. 解压
 
-​	`	tar -zxvf mysqld_exporter-0.14.0.linux-amd64.tar.gz  -C /data/`
+​	`tar -zxvf mysqld_exporter-0.14.0.linux-amd64.tar.gz  -C /data/`
 
 ​	`mv /data/mysqld_exporter-0.14.0.linux-amd64/ /data/mysqld_exporter`	
 
