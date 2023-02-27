@@ -358,9 +358,13 @@ WantedBy=multi-user.target
 
 ​	`systemctl enable alertmanager.service`
 
-### 6. 配置promethues.yam
+### 6. 配置promethues.yaml
+
+- 备份
 
 ​	`cp /data/prometheus/prometheus.yml /data/prometheus/prometheus.yml.bak`
+
+- 编辑
 
 ​	`vim /data/prometheus/prometheus.yml `（job_name中有几台监控的机器就写几行）
 
@@ -705,7 +709,7 @@ inhibit_rules:
 告警详情：{{ $alert.Annotations.description }}
 告警应用: {{ $alert.Labels.name }}
 当前状态: OK
-告警时间：{{ $al：ert.StartsAt.Local }}
+告警时间：{{ $alert.StartsAt.Local }}
 恢复时间：{：{ $alert.EndsAt.Local }}
 ========== END ==========
  </pre>
