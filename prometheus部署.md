@@ -728,7 +728,7 @@ inhibit_rules:
 - web页面：ip+9090上点击alert选项查看是否存在规则
   ![image-20230224153729529](image/image-7.png)
 
-### 12. 邮件告警
+### 12. 
 
 ![image-20230227160046516](image/image-8.png)
 
