@@ -264,6 +264,7 @@ WantedBy=multi-user.target
 `systemctl enable grafana-server.service`
 
 - web页面：ip+3000
+
   - 默认账号密码都是admin admin，登陆时需要修改密码。
 
 ![image-20230224141714202](./image/image-3.png)
@@ -273,6 +274,7 @@ WantedBy=multi-user.target
 ### 6. 配置grafana
 
 - 添加prometheus监控数据及模板，将grafana和prometheus关联起来，也就是在grafana中添加添加数据源
+
   - 点击：设置->Data Source->Add data source->选择prometheus->url内填写http://IP:9090->save&test
 
 ![image-20230224141938640](image/image-4.png)
@@ -728,7 +730,7 @@ inhibit_rules:
 - web页面：ip+9090上点击alert选项查看是否存在规则
   ![image-20230224153729529](image/image-7.png)
 
-### 12. 
+### 12. 邮件告警
 
 ![image-20230227160046516](image/image-8.png)
 
