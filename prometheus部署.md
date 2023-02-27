@@ -1,6 +1,9 @@
 # prometheus部署
 
+简介：由于资源有限，本实验用了两台机器
 
+1. 监控端：部署prometheus、grafana、alertmanager
+2. 被监控端：node_exporter、mysqld_exporter
 
 ## 一. 部署promethus
 
@@ -110,7 +113,7 @@ WantedBy=multi-user.target
 ```bash
 - job_name: 'agent1' #取一个job名称来代表被监控的机器
     static_configs:
-    - targets: ['192.168.44.20:9100'] # 这里改成被监控机器的IP，后面端口接9100
+    - targets: ['192.168.1.1:9100'] # 这里改成被监控机器的IP，后面端口接9100
 ```
 
 - 测试prometheus.yaml文件有无报错
@@ -124,7 +127,7 @@ Checking prometheus.yml
 ### 6. 重新加载prometheus配置文件
 - `curl -X POST http://127.0.0.1:9090/-/reload`，打开prometheus页面输入up查看是不是有对应的数据了
 
-  ![image-20230227143609355](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-promethues验证.png)
+  ![image-20230227154628548](image/image-1.png)
 
 - 回到web管理界面 ——>点——>点Targets ——>可以看到多了一台监控目标
 
@@ -187,7 +190,7 @@ Bye
 ```bash
   - job_name: 'mysql' #取一个job名称来代表被监控的机器
     static_configs:
-      - targets: ['124.221.75.191:9104'] # 这里改成被监控机器的IP，后面端口接9104
+      - targets: ['192.168.1.1:9104'] # 这里改成被监控机器的IP，后面端口接9104
 ```
 
 ### 6. 重启prometheus
@@ -196,7 +199,7 @@ Bye
 
 - 回到web管理界面 ——>点——>点Targets ——>可以看到多了一台监控目标
 
-![image-20230224112843113](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-20230224112843113.png)
+![image-20230227154816415](image/image-2.png)
 
 
 
@@ -260,9 +263,9 @@ WantedBy=multi-user.target
 `systemctl enable grafana-server.service`
 
 - web页面：ip+3000
-  - 默认账号密码都是admin admin，登陆时修改密码admin123。
+  - 默认账号密码都是admin admin，登陆时需要修改密码。
 
-![image-20230224141714202](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-20230224141714202.png)
+![image-20230224141714202](./image/image-3.png)
 
 
 
@@ -271,19 +274,17 @@ WantedBy=multi-user.target
 - 添加prometheus监控数据及模板，将grafana和prometheus关联起来，也就是在grafana中添加添加数据源
   - 点击：设置->Data Source->Add data source->选择prometheus->url内填写http://IP:9090->save&test
 
-![image-20230224141938640](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Desktop:file:文档:prometheus部署:image:Users:ouyangying:Library:Application Support:typora-user-images:image-3.png)
+![image-20230224141938640](image/image-4.png)
 
 - 点击：左边栏Dashboards“+”号内import->输入“8919”->load->更改name为“Prometheus Node”->victoriaMetrics选择刚创建的数据源“prometheus”
 
   - 如要使用其他的模板，请到grafana的官网去查找 https://grafana.com/dashboards\
 
-  ![image-20230227143329410](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-配置granfana.png)
+  ![image-20230227143329410](image/image-5.png)
 
 - 设置完成后，点击"Dashboards"，->"victoriaMetrics"->"Prometheus Node"
 
-  ![image-20230224143248917](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-4.png)
-
-
+  ![image-20230227155129483](image/image-6.png)
 
 
 
@@ -360,14 +361,14 @@ WantedBy=multi-user.target
 
 ​	`cp /data/prometheus/prometheus.yml /data/prometheus/prometheus.yml.bak`
 
-​	`vim /data/prometheus/prometheus.yml `
+​	`vim /data/prometheus/prometheus.yml `（job_name中有几台监控的机器就写几行）
 
 ```bash
 alerting:
   alertmanagers:
   - static_configs:
     - targets:
-	  - 10.10.14.60:9093
+	  - 192.168.1.1:9093
 
 rule_files:
   - "/data/database/prometheus/rules/*.rules"
@@ -380,14 +381,14 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-    - targets: ['10.10.14.60:9090']
+    - targets: ['192.168.1.1:9090']
 
 
   - job_name: 'node'
     static_configs:
-    - targets: ['10.10.14.60:9100']
-    - targets: ['10.10.14.39:9100']
-    - targets: ['10.10.14.40:9100']
+    - targets: ['192.168.1.2:9100']
+    - targets: ['192.168.1.3:9100']
+    - targets: ['192.168.1.4:9100']
 ```
 
 - 测试prometheus.yaml文件有无报错（可以检测出rules文件有无报错）
@@ -638,9 +639,9 @@ groups:
 global:
   resolve_timeout: 5m #处理超时时间，默认为5min
   smtp_smarthost: 'smtp.qq.com:465' #邮箱smtp服务器代理
-  smtp_from: '1052995312@qq.com' #发送邮箱名称
-  smtp_auth_username: '1052995312@qq.com' #邮箱名称
-  smtp_auth_password: 'aerpybthtmtbbbfc' #邮箱授权码
+  smtp_from: '111111112@qq.com' #发送邮箱名称
+  smtp_auth_username: '111111112@qq.com' #邮箱名称
+  smtp_auth_password: 'asdklfjwiehrqc' #邮箱授权码
   smtp_require_tls: false
   smtp_hello: 'qq.com'
 
@@ -660,7 +661,7 @@ route:
 receivers:
   - name: 'email' # 警报
     email_configs: # 邮箱配置
-    - to: '1052995312@qq.com, wangchao@echinacoop.com' #添加多个邮箱中间用,+空格分开
+    - to: '1111111112@qq.com, hello@163.com' #添加多个邮箱中间用,+空格分开
       html: '{{ template "email.html" . }}'
       send_resolved: true
 
@@ -720,11 +721,11 @@ inhibit_rules:
 ### 11. 页面验证
 
 - web页面：ip+9090上点击alert选项查看是否存在规则
-  ![image-20230224153729529](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-20230224153729529.png)
+  ![image-20230224153729529](image/image-7.png)
 
 ### 12. 邮件告警
 
-![image-20230227143004297](/Users/ouyangying/Desktop/file/文档/prometheus部署/image/:Users:ouyangying:Library:Application Support:typora-user-images:image-邮件告警.png)
+![image-20230227160046516](image/image-8.png)
 
 
 
